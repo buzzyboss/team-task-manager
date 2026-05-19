@@ -53,7 +53,7 @@ app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 sequelize.authenticate()
   .then(() => sequelize.sync())
