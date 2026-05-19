@@ -9,7 +9,6 @@ const roleMiddleware = require("../middleware/roleMiddleware");
 router.post(
   "/",
   authMiddleware,
-  roleMiddleware(["Admin"]),
   async (req, res) => {
     try {
       const { name, description } = req.body;
