@@ -1,3 +1,4 @@
+const path = require("path");
 require("dotenv").config();
 
 const sequelize = require("./config/database");
@@ -14,6 +15,12 @@ app.use(express.json());
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/projects", require("./routes/projectRoutes"));
 app.use("/api/tasks", require("./routes/taskRoutes"));
+
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 app.get("/api/dashboard", authMiddleware, async (req, res) => {
   try {
