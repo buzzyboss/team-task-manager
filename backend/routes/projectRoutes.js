@@ -1,40 +1,27 @@
 const express = require("express");
 const router = express.Router();
-
 const Project = require("../models/Project");
-const authMiddleware = require("../middleware/authMiddleware");
-const roleMiddleware = require("../middleware/roleMiddleware");
+const auth = require("../middleware/authMiddleware");
 
-// Create Project (Admin only)
-router.post(
-  "/",
-  authMiddleware,
-  async (req, res) => {
-    try {
-      const { name, description } = req.body;
-
-      const project = await Project.create({
-        name,
-        description,
-        createdBy: req.user.id,
-      });
-
-      res.status(201).json(project);
-
-    } catch (error) {
-      res.status(500).json({ message: "Server error" });
-    }
-  }
-);
-
-// Get Projects (Everyone sees all)
-router.get("/", authMiddleware, async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
-    const projects = await Project.findAll();
-    res.json(projects);
+    const { name, description } = req.body;
+
+    const project = await Project.create({
+      name,
+      description,
+      createdBy: req.user.id,
+    });
+
+    res.json(project);
   } catch {
     res.status(500).json({ message: "Server error" });
   }
+});
+
+router.get("/", auth, async (req, res) => {
+  const projects = await Project.findAll();
+  res.json(projects);
 });
 
 module.exports = router;
